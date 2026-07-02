@@ -135,11 +135,3 @@ https://localhost:7193/swagger
 * Pagination
 * Filtering & Searching
 * Unit Testing
-
-## Author
-
-Muaz Abdullah
-
-Business Analyst | Power BI Developer | Aspiring .NET Backend Developer
-
-This repository is part of my ASP.NET Core learning journey and serves as a practical playground for experimenting with backend development concepts.
