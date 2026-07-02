@@ -28,6 +28,7 @@ namespace WebApplicationDay1.Controllers
         }
 
         [HttpGet("{name}")]
+        // Another way to get a student by name could be using a query parameter instead of a route parameter. For example, you could use the following code:
         //  [HttpGet("/api/students/s/{name}")]
         public ActionResult GetStudentsName(string name)
         {
