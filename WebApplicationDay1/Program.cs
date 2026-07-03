@@ -13,17 +13,22 @@ namespace WebApplicationDay1
 
             // Add services to the container.
 
-            builder.Services.AddControllers()
-                .AddJsonOptions(options =>
+            builder.Services.AddControllers().AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.ReferenceHandler =
                         ReferenceHandler.IgnoreCycles;
                 });
 
+            //builder.Services.AddControllers().AddNewtonsoftJson(options =>
+            //{
+            //    options.SerializerSettings.ReferenceLoopHandling =
+            //        Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            //});
+
             builder.Services.AddOpenApi();
 
             builder.Services.AddDbContext<ITIContext>(options =>
-                options.UseSqlServer(
+                options.UseLazyLoadingProxies().UseSqlServer(
                     builder.Configuration.GetConnectionString("ITIConnection")));
 
             builder.Services.AddEndpointsApiExplorer();

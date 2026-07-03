@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebApplicationDay1.DTO;
 using WebApplicationDay1.Models;
 
 namespace WebApplicationDay1.Controllers
@@ -15,39 +16,64 @@ namespace WebApplicationDay1.Controllers
         }
 
         [HttpGet]
-        public List<Student> GetAllStudents()
+        public ActionResult<List<StudentDTO>> GetAllStudents()
         {
-            return db.Students.ToList();
+            List<Student> students = db.Students.ToList();
+            List<StudentDTO> studentsDTO = students.Select(student => new StudentDTO()
+            {
+                ID = student.St_Id,
+                Age = student.St_Age ?? 0,
+                Fullname = student.St_Fname.Trim() + " " + student.St_Lname.Trim(),
+                Address = student.St_Address,
+                Department = student.Dept?.Dept_Name ?? "No Department",
+                SupervisorId = student.St_super ?? 0
+            }).ToList();
+
+            return Ok(studentsDTO);
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult GetStudents(int id)
+        public ActionResult GetStudentsById(int id)
         {
             Student student = db.Students.Find(id);
-            return student == null ? NotFound() : Ok(student);
+            if (student == null) return NotFound();
+            else
+            {
+                StudentDTO studentDTO = new StudentDTO()
+                {
+                    ID = student.St_Id,
+                    Age = student.St_Age ?? 0,
+                    Fullname = student.St_Fname.Trim() + " " + student.St_Lname.Trim(),
+                    Address = student.St_Address,
+                    Department = student.Dept?.Dept_Name ?? "No Department",
+                    SupervisorId = student.St_super ?? 0
+                };
+
+                return Ok(studentDTO);
+            }
         }
 
         [HttpGet("{name}")]
         // Another way to get a student by name could be using a query parameter instead of a route parameter. For example, you could use the following code:
         //  [HttpGet("/api/students/s/{name}")]
-        public ActionResult GetStudentsName(string name)
+        public ActionResult GetStudentsByName(string name)
         {
             Student student = db.Students.FirstOrDefault(s => s.St_Fname == name);
             return student == null ? NotFound() : Ok(student);
         }
 
         [HttpPost]
-        public ActionResult Add(Student student)
+        public ActionResult AddNewStudent(Student student)
         {
             if (student == null) return BadRequest();
             if (!ModelState.IsValid) return BadRequest();
             db.Students.Add(student);
             db.SaveChanges();
-            return CreatedAtAction(nameof(GetStudents), new { id = student.St_Id }, student);
+            return CreatedAtAction(nameof(GetStudentsById), new { id = student.St_Id }, student);
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult Update(int id, Student student)
+        public ActionResult UpdateStudent(int id, Student student)
         {
             if (student == null) return BadRequest();
             if (!ModelState.IsValid) return BadRequest();
@@ -57,7 +83,7 @@ namespace WebApplicationDay1.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult Delete(int id)
+        public ActionResult DeleteStudent(int id)
         {
             Student student = db.Students.Find(id);
             if (student == null) return NotFound();

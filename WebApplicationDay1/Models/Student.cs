@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApplicationDay1.Models;
@@ -32,6 +33,7 @@ public partial class Student
 
     [ForeignKey("Dept_Id")]
     [InverseProperty("Students")]
+   // [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public virtual Department Dept { get; set; }
 
     [InverseProperty("St_superNavigation")]
