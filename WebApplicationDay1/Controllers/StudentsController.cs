@@ -27,7 +27,7 @@ namespace WebApplicationDay1.Controllers
             {
                 ID = student.St_Id,
                 Age = student.St_Age ?? 0,
-                Fullname = $"{student.St_Fname?.Trim()} {student.St_Lname?.Trim()}",
+                Fullname = student.FullName,
                 Address = student.St_Address,
                 Department = student.Dept?.Dept_Name ?? "No Department",
                 SupervisorId = student.St_super ?? 0
@@ -50,8 +50,8 @@ namespace WebApplicationDay1.Controllers
             {
                 ID = student.St_Id,
                 Age = student.St_Age ?? 0,
-                Fullname = $"{student.St_Fname?.Trim()} {student.St_Lname?.Trim()}",
-                Address = student.St_Address,
+                Fullname = student.FullName,
+                Address = student.St_Address ?? "No Address",
                 Department = student.Dept?.Dept_Name ?? "No Department",
                 SupervisorId = student.St_super ?? 0
             };
@@ -73,7 +73,7 @@ namespace WebApplicationDay1.Controllers
             {
                 ID = student.St_Id,
                 Age = student.St_Age ?? 0,
-                Fullname = $"{student.St_Fname?.Trim()} {student.St_Lname?.Trim()}",
+                Fullname = student.FullName,
                 Address = student.St_Address ?? "No Address",
                 Department = student.Dept?.Dept_Name ?? "No Department",
                 SupervisorId = student.St_super ?? 0

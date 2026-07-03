@@ -22,6 +22,9 @@ public partial class Student
     [StringLength(10)]
     public string St_Lname { get; set; }
 
+    [NotMapped]
+    public string FullName => $"{St_Fname?.Trim() ?? string.Empty} {St_Lname?.Trim() ?? string.Empty}";
+
     [StringLength(100)]
     public string St_Address { get; set; }
 
@@ -33,7 +36,7 @@ public partial class Student
 
     [ForeignKey("Dept_Id")]
     [InverseProperty("Students")]
-   // [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    // [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public virtual Department Dept { get; set; }
 
     [InverseProperty("St_superNavigation")]
