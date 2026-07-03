@@ -9,7 +9,7 @@ namespace WebApplicationDay1.Controllers
     [ApiController]
     public class DepartmentController : ControllerBase
     {
-        ITIContext db;
+        private readonly ITIContext db;
 
         public DepartmentController(ITIContext db)
         {

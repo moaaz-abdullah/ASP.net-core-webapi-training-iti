@@ -12,18 +12,21 @@ namespace WebApplicationDay1
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddControllers();
 
-            builder.Services.AddControllers().AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.ReferenceHandler =
-                        ReferenceHandler.IgnoreCycles;
-                });
+            #region
+            //builder.Services.AddControllers().AddJsonOptions(options =>
+            //    {
+            //        options.JsonSerializerOptions.ReferenceHandler =
+            //            ReferenceHandler.IgnoreCycles;
+            //    });
 
             //builder.Services.AddControllers().AddNewtonsoftJson(options =>
             //{
             //    options.SerializerSettings.ReferenceLoopHandling =
             //        Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             //});
+            #endregion
 
             builder.Services.AddOpenApi();
 
