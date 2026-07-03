@@ -1,10 +1,12 @@
-﻿# ASP.NET Core Student API Training
+# ASP.NET Core Student API Training
 
-A training and educational project created while learning ASP.NET Core Web API and Entity Framework Core.
+A training and educational project created while learning ASP.NET Core Web API, Entity Framework Core, and SQL Server.
 
-The project demonstrates how to build RESTful APIs, connect to SQL Server databases, perform CRUD operations, use Dependency Injection, and document APIs using Swagger.
+The project demonstrates how to build RESTful APIs, connect to SQL Server databases, perform CRUD operations, use Dependency Injection, implement DTOs, handle entity relationships, and document APIs using Swagger.
 
 > **Note:** This project is intended for learning and practice purposes only and is not designed for production use.
+
+---
 
 ## Learning Objectives
 
@@ -18,8 +20,12 @@ This project was built to practice and understand:
 * Dependency Injection (DI)
 * CRUD Operations
 * Routing and Action Results
+* Data Transfer Objects (DTOs)
+* Entity Relationships
 * Swagger / OpenAPI documentation
 * JSON serialization and handling circular references
+
+---
 
 ## Technologies Used
 
@@ -30,32 +36,71 @@ This project was built to practice and understand:
 * EF Core Power Tools
 * C#
 
+---
+
 ## Project Features
 
 ### Student Endpoints
 
-| Method | Endpoint               | Description                |
-| ------ | ---------------------- | -------------------------- |
-| GET    | `/api/students`        | Get all students           |
-| GET    | `/api/students/{id}`   | Get student by ID          |
-| GET    | `/api/students/{name}` | Get student by name        |
-| POST   | `/api/students`        | Add a new student          |
-| PUT    | `/api/students/{id}`   | Update an existing student |
-| DELETE | `/api/students/{id}`   | Delete a student           |
+| Method | Endpoint                       | Description                |
+| ------ | ------------------------------ | -------------------------- |
+| GET    | `/api/students`                | Get all students           |
+| GET    | `/api/students/{id}`           | Get student by ID          |
+| GET    | `/api/students/by-name/{name}` | Get student by name        |
+| POST   | `/api/students`                | Add a new student          |
+| PUT    | `/api/students/{id}`           | Update an existing student |
+| DELETE | `/api/students/{id}`           | Delete a student           |
+
+### DTO Implementation
+
+The project uses a `StudentDTO` to avoid exposing Entity Framework models directly to API consumers.
+
+Mapped fields include:
+
+* ID
+* Full Name
+* Age
+* Address
+* Department Name
+* Supervisor ID
+
+### Entity Relationships
+
+The application demonstrates:
+
+* One-to-Many relationship between Department and Students
+* Self-Referencing relationship between Student and Supervisor
+
+### Dependency Injection
+
+The `ITIContext` is registered using the built-in ASP.NET Core Dependency Injection container and injected into controllers.
+
+### Swagger Integration
+
+Swagger is configured to provide interactive API documentation and endpoint testing.
+
+---
 
 ## Database
 
-The project uses the ITI database and was scaffolded using EF Core Power Tools with a Database First approach.
+The project uses the **ITI Database** and was generated using **EF Core Power Tools** with a **Database First** approach.
 
-Entities currently include:
+### Entities
 
 * Student
 * Department
 
-The Student entity contains relationships with:
+### Relationships
 
-* Department
-* Supervisor Student (Self-Referencing Relationship)
+#### Department → Students
+
+A department can have multiple students.
+
+#### Student → Supervisor
+
+A student can have another student as a supervisor through a self-referencing relationship.
+
+---
 
 ## Handling Circular References
 
@@ -69,15 +114,19 @@ ReferenceHandler.IgnoreCycles
 
 during JSON serialization configuration.
 
-## Swagger Documentation
+---
 
-Swagger is enabled for API testing and exploration.
+## Swagger Documentation
 
 After running the application, navigate to:
 
 ```text
 https://localhost:7193/swagger
 ```
+
+to explore and test all available endpoints.
+
+---
 
 ## Getting Started
 
@@ -124,9 +173,53 @@ Then open:
 https://localhost:7193/swagger
 ```
 
+---
+
+## Project Architecture
+
+```text
+Controllers/
+│
+├── StudentsController.cs
+│
+DTO/
+│
+├── StudentDTO.cs
+│
+Models/
+│
+├── Student.cs
+├── Department.cs
+├── ITIContext.cs
+│
+Program.cs
+appsettings.json
+```
+
+---
+
+## What I Learned
+
+Through this project I practiced:
+
+* Creating REST APIs with ASP.NET Core
+* Using Entity Framework Core with SQL Server
+* Database First development
+* Dependency Injection
+* DTO Mapping
+* CRUD Operations
+* Route Configuration
+* Swagger Integration
+* Handling Circular References
+* Working with Entity Relationships
+
+---
+
 ## Future Improvements
 
-* DTO Pattern
+* CreateStudentDTO
+* UpdateStudentDTO
+* Async/Await Operations
 * Repository Pattern
 * Service Layer
 * AutoMapper
@@ -134,4 +227,6 @@ https://localhost:7193/swagger
 * Authentication & Authorization (JWT)
 * Pagination
 * Filtering & Searching
+* Global Exception Handling
 * Unit Testing
+* Integration Testing
