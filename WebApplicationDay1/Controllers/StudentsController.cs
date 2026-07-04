@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Annotations;
 using WebApplicationDay1.DTO;
 using WebApplicationDay1.Models;
 
@@ -16,6 +17,11 @@ namespace WebApplicationDay1.Controllers
             this.db = db;
         }
 
+        [SwaggerOperation(
+            Summary = "Get all students",
+            Description = "Retrieve a list of all students with their department information."
+        )]
+        [SwaggerResponse(200, "List of students", typeof(List<StudentDTO>))]
         [HttpGet]
         public ActionResult<List<StudentDTO>> GetAllStudents()
         {
@@ -36,6 +42,14 @@ namespace WebApplicationDay1.Controllers
             return Ok(studentsDTO);
         }
 
+        /// <summary>
+        /// Get a student by ID 
+        /// </summary>
+        /// <param name="id">The ID of the student to retrieve</param>
+        /// <remarks>
+        /// Retrieves a student by their unique ID.
+        /// </remarks>
+        /// <returns>The student with the specified ID</returns>
         [HttpGet("{id:int}")]
         public ActionResult<StudentDTO> GetStudentById(int id)
         {

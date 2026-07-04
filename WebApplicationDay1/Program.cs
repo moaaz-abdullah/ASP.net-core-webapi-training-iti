@@ -1,6 +1,8 @@
 
+using System.Reflection;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
 using WebApplicationDay1.Models;
 
 namespace WebApplicationDay1
@@ -9,7 +11,7 @@ namespace WebApplicationDay1
     {
         public static void Main(string[] args)
         {
-            string text = "";
+            string text = "AllowAll";
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -34,7 +36,25 @@ namespace WebApplicationDay1
                     builder.Configuration.GetConnectionString("ITIConnection")));
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1",
+                    new OpenApiInfo
+                    {
+                        Title = "My API",
+                        Version = "v1",
+                        Description = "This is my API description",
+                        Contact = new OpenApiContact { Email = "moaaz@gmail.com" }
+                    });
+
+                options.EnableAnnotations();
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+                options.IncludeXmlComments(xmlPath);
+            });
 
             var app = builder.Build();
 
@@ -48,9 +68,9 @@ namespace WebApplicationDay1
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
-
             app.UseCors(text);
+
+            app.UseAuthorization();
 
             app.MapControllers();
 
