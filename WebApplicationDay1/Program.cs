@@ -9,24 +9,23 @@ namespace WebApplicationDay1
     {
         public static void Main(string[] args)
         {
+            string text = "";
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             builder.Services.AddControllers();
 
-            #region
-            //builder.Services.AddControllers().AddJsonOptions(options =>
-            //    {
-            //        options.JsonSerializerOptions.ReferenceHandler =
-            //            ReferenceHandler.IgnoreCycles;
-            //    });
-
-            //builder.Services.AddControllers().AddNewtonsoftJson(options =>
-            //{
-            //    options.SerializerSettings.ReferenceLoopHandling =
-            //        Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-            //});
-            #endregion
+            // Cors Configuration 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(text,
+                builder =>
+                {
+                    builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+                });
+            });
 
             builder.Services.AddOpenApi();
 
@@ -50,6 +49,8 @@ namespace WebApplicationDay1
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+
+            app.UseCors(text);
 
             app.MapControllers();
 
