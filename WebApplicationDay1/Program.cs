@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using WebApplicationDay1.Models;
+using WebApplicationDay1.Repository;
 
 namespace WebApplicationDay1
 {
@@ -36,6 +37,8 @@ namespace WebApplicationDay1
                     builder.Configuration.GetConnectionString("ITIConnection")));
 
             builder.Services.AddEndpointsApiExplorer();
+
+            builder.Services.AddScoped<StudentsRepository>();
 
             builder.Services.AddSwaggerGen(options =>
             {

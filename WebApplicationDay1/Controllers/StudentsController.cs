@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
 using WebApplicationDay1.DTO;
 using WebApplicationDay1.Models;
+using WebApplicationDay1.Repository;
 
 namespace WebApplicationDay1.Controllers
 {
@@ -10,11 +11,11 @@ namespace WebApplicationDay1.Controllers
     [ApiController]
     public class StudentsController : ControllerBase
     {
-        private readonly ITIContext db;
-
-        public StudentsController(ITIContext db)
+        // private readonly ITIContext db;
+        private readonly StudentsRepository repository;
+        public StudentsController(StudentsRepository repository)
         {
-            this.db = db;
+            this.repository = repository;
         }
 
         [SwaggerOperation(
@@ -25,9 +26,7 @@ namespace WebApplicationDay1.Controllers
         [HttpGet]
         public ActionResult<List<StudentDTO>> GetAllStudents()
         {
-            var students = db.Students
-                .Include(s => s.Dept)
-                .ToList();
+            var students = repository.GetAllStudents();
 
             var studentsDTO = students.Select(student => new StudentDTO
             {
@@ -53,9 +52,7 @@ namespace WebApplicationDay1.Controllers
         [HttpGet("{id:int}")]
         public ActionResult<StudentDTO> GetStudentById(int id)
         {
-            var student = db.Students
-                .Include(s => s.Dept)
-                .FirstOrDefault(s => s.St_Id == id);
+            var student = repository.GetStudentById(id);
 
             if (student == null)
                 return NotFound();
@@ -76,9 +73,7 @@ namespace WebApplicationDay1.Controllers
         [HttpGet("by-name/{name}")]
         public ActionResult<StudentDTO> GetStudentByName(string name)
         {
-            var student = db.Students
-                .Include(s => s.Dept)
-                .FirstOrDefault(s => s.St_Fname == name);
+            var student = repository.GetStudentByName(name);
 
             if (student == null)
                 return NotFound();
@@ -105,8 +100,7 @@ namespace WebApplicationDay1.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            db.Students.Add(student);
-            db.SaveChanges();
+            repository.AddStudent(student);
 
             return CreatedAtAction(
                 nameof(GetStudentById),
@@ -123,7 +117,7 @@ namespace WebApplicationDay1.Controllers
             if (id != student.St_Id)
                 return BadRequest("ID mismatch.");
 
-            var existingStudent = db.Students.Find(id);
+            var existingStudent = repository.GetStudentById(id);
 
             if (existingStudent == null)
                 return NotFound();
@@ -135,7 +129,7 @@ namespace WebApplicationDay1.Controllers
             existingStudent.Dept_Id = student.Dept_Id;
             existingStudent.St_super = student.St_super;
 
-            db.SaveChanges();
+            repository.UpdateStudent(existingStudent);
 
             return NoContent();
         }
@@ -143,13 +137,12 @@ namespace WebApplicationDay1.Controllers
         [HttpDelete("{id:int}")]
         public ActionResult DeleteStudent(int id)
         {
-            var student = db.Students.Find(id);
+            var student = repository.GetStudentById(id);
 
             if (student == null)
                 return NotFound();
 
-            db.Students.Remove(student);
-            db.SaveChanges();
+            repository.DeleteStudent(id);
 
             return Ok(student);
         }
