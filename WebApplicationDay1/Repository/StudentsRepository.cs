@@ -2,7 +2,7 @@
 
 namespace WebApplicationDay1.Repository
 {
-    public class StudentsRepository
+    public class StudentsRepository : IStudentRepository
     {
         private readonly ITIContext db;
 

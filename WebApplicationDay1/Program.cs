@@ -38,7 +38,9 @@ namespace WebApplicationDay1
 
             builder.Services.AddEndpointsApiExplorer();
 
-            builder.Services.AddScoped<StudentsRepository>();
+            //builder.Services.AddScoped<StudentsRepository>();
+
+            builder.Services.AddScoped<IStudentRepository, StudentsRepository>();
 
             builder.Services.AddSwaggerGen(options =>
             {

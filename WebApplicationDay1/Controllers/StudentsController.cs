@@ -12,8 +12,8 @@ namespace WebApplicationDay1.Controllers
     public class StudentsController : ControllerBase
     {
         // private readonly ITIContext db;
-        private readonly StudentsRepository repository;
-        public StudentsController(StudentsRepository repository)
+        private readonly IStudentRepository repository;
+        public StudentsController(IStudentRepository repository)
         {
             this.repository = repository;
         }
