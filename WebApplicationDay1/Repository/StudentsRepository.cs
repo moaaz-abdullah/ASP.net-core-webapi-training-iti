@@ -4,7 +4,7 @@ namespace WebApplicationDay1.Repository
 {
     public class StudentsRepository
     {
-        ITIContext db;
+        private readonly ITIContext db;
 
         public StudentsRepository(ITIContext db)
         {
@@ -29,23 +29,25 @@ namespace WebApplicationDay1.Repository
         public void AddStudent(Student student)
         {
             db.Students.Add(student);
-            db.SaveChanges();
         }
 
         public void UpdateStudent(Student student)
         {
             db.Students.Update(student);
-            db.SaveChanges();
         }
-
+        
         public void DeleteStudent(int id)
         {
             var student = db.Students.Find(id);
             if (student != null)
             {
                 db.Students.Remove(student);
-                db.SaveChanges();
             }
+        }
+
+        public void SaveChanges()
+        {
+            db.SaveChanges();
         }
     }
 }

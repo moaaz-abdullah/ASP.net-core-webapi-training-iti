@@ -101,6 +101,7 @@ namespace WebApplicationDay1.Controllers
                 return BadRequest(ModelState);
 
             repository.AddStudent(student);
+            repository.SaveChanges();
 
             return CreatedAtAction(
                 nameof(GetStudentById),
@@ -130,6 +131,7 @@ namespace WebApplicationDay1.Controllers
             existingStudent.St_super = student.St_super;
 
             repository.UpdateStudent(existingStudent);
+            repository.SaveChanges();
 
             return NoContent();
         }
@@ -143,6 +145,7 @@ namespace WebApplicationDay1.Controllers
                 return NotFound();
 
             repository.DeleteStudent(id);
+            repository.SaveChanges();
 
             return Ok(student);
         }
