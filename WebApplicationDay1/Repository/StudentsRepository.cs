@@ -33,9 +33,9 @@ namespace WebApplicationDay1.Repository
 
         public void UpdateStudent(Student student)
         {
-            db.Students.Update(student);
+            db.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
         }
-        
+
         public void DeleteStudent(int id)
         {
             var student = db.Students.Find(id);

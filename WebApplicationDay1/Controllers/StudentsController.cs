@@ -13,6 +13,7 @@ namespace WebApplicationDay1.Controllers
     {
         // private readonly ITIContext db;
         private readonly IStudentRepository repository;
+
         public StudentsController(IStudentRepository repository)
         {
             this.repository = repository;
