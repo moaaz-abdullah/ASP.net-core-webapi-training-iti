@@ -18,10 +18,10 @@ namespace WebApplicationDay1.Controllers
         }
 
         [HttpPost]
-        public ActionResult add(Student student)
+        public ActionResult add(Student student)    
         {
-            unitOfWork.departmentRepos.Add(student.Dept);
-            unitOfWork.studentRepos.Add(student);
+            unitOfWork.DepartmentRepository.Add(student.Dept);
+            unitOfWork.StudentRepository.Add(student);
             unitOfWork.SaveChanges();
             return Ok();
         }

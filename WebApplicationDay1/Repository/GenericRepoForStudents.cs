@@ -22,6 +22,11 @@ namespace WebApplicationDay1.Repository
             return db.Set<TEntity>().Find(id);
         }
 
+        public TEntity? GetByName(string name)
+        {
+            return db.Set<TEntity>().FirstOrDefault(e => EF.Property<string>(e, "Name") == name);
+        }
+
         public void Add(TEntity entity)
         {
             db.Set<TEntity>().Add(entity);

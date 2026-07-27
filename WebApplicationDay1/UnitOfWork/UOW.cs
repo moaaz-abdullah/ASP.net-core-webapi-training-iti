@@ -8,14 +8,34 @@ namespace WebApplicationDay1.UnitOfWork
     {
         private readonly ITIContext db;
 
-        public GenericRepository<Student> studentRepos;
-        public GenericRepository<Department> departmentRepos;
+        GenericRepository<Student> studentRepos;
+        GenericRepository<Department> departmentRepos;
 
         public UOW(ITIContext db)
         {
             this.db = db;
-            studentRepos = new GenericRepository<Student>(db);
-            departmentRepos = new GenericRepository<Department>(db);
+        }
+
+        public GenericRepository<Student> StudentRepository
+        {
+            get
+            {
+                if (studentRepos == null)
+                    studentRepos = new GenericRepository<Student>(db);
+
+                return studentRepos;
+            }
+        }
+
+        public GenericRepository<Department> DepartmentRepository
+        {
+            get
+            {
+                if (departmentRepos == null)
+                    departmentRepos = new GenericRepository<Department>(db);
+
+                return departmentRepos;
+            }
         }
 
         public void SaveChanges()

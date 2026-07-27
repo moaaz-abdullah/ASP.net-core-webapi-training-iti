@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using WebApplicationDay1.Models;
 using WebApplicationDay1.Repository;
+using WebApplicationDay1.UnitOfWork;
 
 namespace WebApplicationDay1
 {
@@ -40,7 +41,9 @@ namespace WebApplicationDay1
 
             //builder.Services.AddScoped<StudentsRepository>();
 
-            builder.Services.AddScoped<IStudentRepository, StudentsRepository>();
+            //builder.Services.AddScoped<IStudentRepository, StudentsRepository>();
+
+            builder.Services.AddScoped<UOW>();
 
             builder.Services.AddSwaggerGen(options =>
             {
