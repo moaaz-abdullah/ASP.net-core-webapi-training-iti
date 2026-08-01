@@ -1,10 +1,10 @@
-# ASP.NET Core Student API Training
+# ASP.NET Core Student Management API
 
-A training and educational project created while learning ASP.NET Core Web API, Entity Framework Core, and SQL Server.
+A training and educational project developed while learning **ASP.NET Core Web API**, **Entity Framework Core**, **SQL Server**, and software architecture patterns such as **Repository Pattern**, **Generic Repository**, **Unit of Work**, and **Dependency Injection**.
 
-The project demonstrates how to build RESTful APIs, connect to SQL Server databases, perform CRUD operations, use Dependency Injection, implement DTOs, handle entity relationships, and document APIs using Swagger.
+The project demonstrates how to build scalable RESTful APIs using clean architecture concepts and best practices commonly used in enterprise .NET applications.
 
-> **Note:** This project is intended for learning and practice purposes only and is not designed for production use.
+> **Note:** This project was created for learning purposes and experimentation with ASP.NET Core technologies.
 
 ---
 
@@ -12,18 +12,22 @@ The project demonstrates how to build RESTful APIs, connect to SQL Server databa
 
 This project was built to practice and understand:
 
-* ASP.NET Core Web API fundamentals
-* RESTful API design
+* ASP.NET Core Web API Fundamentals
+* RESTful API Design Principles
 * Entity Framework Core
-* Database First approach
-* SQL Server integration
+* Database First Development
+* SQL Server Integration
 * Dependency Injection (DI)
+* Generic Repository Pattern
+* Unit of Work Pattern
 * CRUD Operations
-* Routing and Action Results
-* Data Transfer Objects (DTOs)
+* DTO Mapping
 * Entity Relationships
-* Swagger / OpenAPI documentation
-* JSON serialization and handling circular references
+* Lazy Loading
+* Swagger / OpenAPI Documentation
+* XML Comments Documentation
+* CORS Configuration
+* API Response Handling
 
 ---
 
@@ -33,29 +37,103 @@ This project was built to practice and understand:
 * Entity Framework Core
 * SQL Server
 * Swagger (Swashbuckle)
+* OpenAPI
 * EF Core Power Tools
 * C#
+* LINQ
+
+---
+
+## Architecture Patterns
+
+### Dependency Injection (DI)
+
+The application uses ASP.NET Core's built-in Dependency Injection container to manage object creation and lifetime.
+
+Registered services include:
+
+* ITIContext
+* Unit Of Work (UOW)
+
+This improves:
+
+* Maintainability
+* Testability
+* Loose Coupling
+* Separation of Concerns
+
+---
+
+### Generic Repository Pattern
+
+A reusable Generic Repository was implemented to provide common database operations for any entity type.
+
+Available operations include:
+
+* GetAll()
+* GetById()
+* GetByName()
+* Add()
+* Update()
+* Delete()
+
+This reduces code duplication and centralizes data access logic.
+
+---
+
+### Unit of Work Pattern
+
+The Unit of Work class coordinates multiple repositories using a single database context.
+
+Repositories available through UOW:
+
+* Student Repository
+* Department Repository
+
+Benefits:
+
+* Single database transaction scope
+* Better organization of repositories
+* Simplified SaveChanges management
 
 ---
 
 ## Project Features
 
-### Student Endpoints
+### Student Management API
 
 | Method | Endpoint                       | Description                |
 | ------ | ------------------------------ | -------------------------- |
-| GET    | `/api/students`                | Get all students           |
-| GET    | `/api/students/{id}`           | Get student by ID          |
-| GET    | `/api/students/by-name/{name}` | Get student by name        |
-| POST   | `/api/students`                | Add a new student          |
+| GET    | `/api/students`                | Retrieve all students      |
+| GET    | `/api/students/{id}`           | Retrieve a student by ID   |
+| GET    | `/api/students/by-name/{name}` | Retrieve a student by name |
+| POST   | `/api/students`                | Create a new student       |
 | PUT    | `/api/students/{id}`           | Update an existing student |
 | DELETE | `/api/students/{id}`           | Delete a student           |
 
+---
+
+### Student & Department Creation
+
+A dedicated endpoint demonstrates working with multiple entities in a single request using the Unit of Work pattern.
+
+Example:
+
+* Create Department
+* Create Student
+* Save all changes through one UOW transaction
+
+---
+
 ### DTO Implementation
 
-The project uses a `StudentDTO` to avoid exposing Entity Framework models directly to API consumers.
+The API uses DTOs to avoid exposing Entity Framework entities directly.
 
-Mapped fields include:
+Current DTO:
+
+#### StudentDTO
+
+Contains:
 
 * ID
 * Full Name
@@ -64,123 +142,101 @@ Mapped fields include:
 * Department Name
 * Supervisor ID
 
+Benefits:
+
+* Better API design
+* Reduced payload size
+* Improved security
+* Decoupling between API contracts and database models
+
+---
+
 ### Entity Relationships
 
-The application demonstrates:
+The project demonstrates:
 
-* One-to-Many relationship between Department and Students
-* Self-Referencing relationship between Student and Supervisor
+#### Department → Students
 
-### Dependency Injection
+One Department can contain multiple Students.
 
-The `ITIContext` is registered using the built-in ASP.NET Core Dependency Injection container and injected into controllers.
+#### Student → Supervisor
 
-### Swagger Integration
+Self-referencing relationship where a Student may have another Student as a Supervisor.
 
-Swagger is configured to provide interactive API documentation and endpoint testing.
+---
+
+### Lazy Loading
+
+The application enables:
+
+```csharp
+options.UseLazyLoadingProxies()
+```
+
+This allows navigation properties to be loaded automatically when accessed.
+
+---
+
+### CORS Configuration
+
+The API supports Cross-Origin Resource Sharing (CORS) using a configurable policy.
+
+Current policy allows:
+
+* Any Origin
+* Any Method
+* Any Header
+
+Useful for frontend integration and testing.
+
+---
+
+### Swagger & OpenAPI Documentation
+
+Swagger is configured with:
+
+* API Metadata
+* Endpoint Documentation
+* XML Comments
+* Swagger Annotations
+
+Features:
+
+* Interactive API Testing
+* Automatic API Documentation
+* Request/Response Visualization
 
 ---
 
 ## Database
 
-The project uses the **ITI Database** and was generated using **EF Core Power Tools** with a **Database First** approach.
+The project uses the **ITI Database** generated using **EF Core Power Tools** through a **Database First** approach.
 
-### Entities
+### Main Entities
 
-* Student
+#### Student
+
+Represents student information including:
+
+* Name
+* Address
+* Age
 * Department
+* Supervisor
 
-### Relationships
+#### Department
 
-#### Department → Students
-
-A department can have multiple students.
-
-#### Student → Supervisor
-
-A student can have another student as a supervisor through a self-referencing relationship.
+Represents academic departments and their students.
 
 ---
 
-## Handling Circular References
-
-Because the Student entity contains a self-referencing relationship (`St_superNavigation`), JSON serialization may encounter circular reference issues.
-
-To handle this, the project uses:
-
-```csharp
-ReferenceHandler.IgnoreCycles
-```
-
-during JSON serialization configuration.
-
----
-
-## Swagger Documentation
-
-After running the application, navigate to:
-
-```text
-https://localhost:7193/swagger
-```
-
-to explore and test all available endpoints.
-
----
-
-## Getting Started
-
-### Prerequisites
-
-* .NET SDK
-* SQL Server
-* Visual Studio 2022
-
-### Clone the Repository
-
-```bash
-git clone https://github.com/your-username/aspnetcore-student-api-training.git
-```
-
-### Configure Connection String
-
-Update the connection string inside:
-
-```text
-appsettings.json
-```
-
-Example:
-
-```json
-{
-  "ConnectionStrings": {
-    "ITIConnection": "Server=.;Database=ITI;Trusted_Connection=True;TrustServerCertificate=True"
-  }
-}
-```
-
-### Run the Project
-
-```bash
-dotnet restore
-dotnet run
-```
-
-Then open:
-
-```text
-https://localhost:7193/swagger
-```
-
----
-
-## Project Architecture
+## Project Structure
 
 ```text
 Controllers/
 │
 ├── StudentsController.cs
+├── StudentDeptController.cs
 │
 DTO/
 │
@@ -192,8 +248,42 @@ Models/
 ├── Department.cs
 ├── ITIContext.cs
 │
+Repository/
+│
+├── GenericRepository.cs
+├── StudentsRepository.cs
+├── IStudentRepository.cs
+│
+UnitOfWork/
+│
+├── UOW.cs
+│
 Program.cs
 appsettings.json
+```
+
+---
+
+## Dependency Flow
+
+```text
+Request
+   │
+   ▼
+StudentsController
+   │
+   ▼
+Unit Of Work
+   │
+   ├── Student Repository
+   │
+   └── Department Repository
+   │
+   ▼
+ITIContext
+   │
+   ▼
+SQL Server
 ```
 
 ---
@@ -202,31 +292,21 @@ appsettings.json
 
 Through this project I practiced:
 
-* Creating REST APIs with ASP.NET Core
-* Using Entity Framework Core with SQL Server
-* Database First development
+* Building RESTful APIs using ASP.NET Core
+* Entity Framework Core Database First Approach
+* SQL Server Integration
 * Dependency Injection
+* Generic Repository Pattern
+* Unit of Work Pattern
 * DTO Mapping
 * CRUD Operations
-* Route Configuration
-* Swagger Integration
-* Handling Circular References
-* Working with Entity Relationships
+* Entity Relationships
+* Lazy Loading
+* Swagger Documentation
+* OpenAPI Configuration
+* XML Comments Documentation
+* CORS Configuration
+* Clean Code Practices
 
----
-
-## Future Improvements
-
-* CreateStudentDTO
-* UpdateStudentDTO
-* Async/Await Operations
-* Repository Pattern
-* Service Layer
-* AutoMapper
-* Fluent Validation
-* Authentication & Authorization (JWT)
-* Pagination
-* Filtering & Searching
-* Global Exception Handling
-* Unit Testing
-* Integration Testing
+* Docker Support
+* CI/CD Pipeline
