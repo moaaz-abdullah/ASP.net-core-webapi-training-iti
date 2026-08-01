@@ -30,7 +30,7 @@ namespace WebApplicationDay1.Controllers
                 var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
 
                 // create token
-                var signingCredential = new SigningCredentials(key, SecurityAlgorithms.Sha256);
+                var signingCredential = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
                 var token = new JwtSecurityToken(
                     claims: claim,
@@ -38,15 +38,17 @@ namespace WebApplicationDay1.Controllers
                     signingCredentials: signingCredential
                     );
 
-                var stringToken = new JwtSecurityTokenHandler();
-                stringToken.WriteToken(token);
+                var tokenHandler = new JwtSecurityTokenHandler();
+                string tokenString = tokenHandler.WriteToken(token);
 
-                return Ok(stringToken);
+                return Ok(tokenString);
             }
             else
             {
                 return Unauthorized();
             }
+
+            //eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9wb3N0YWxjb2RlIjoiNjQ2MTIiLCJleHAiOjE3ODU2MzI1NDd9.8tPJcNXoyi4L_2llOxAl8J9Jri0Xg3YdlCy2uTRhfdU
         }
     }
 }
