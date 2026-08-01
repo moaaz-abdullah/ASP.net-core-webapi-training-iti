@@ -64,6 +64,19 @@ namespace WebApplicationDay1
                 options.IncludeXmlComments(xmlPath);
             });
 
+            builder.Services.AddAuthentication(options => options.DefaultAuthenticateScheme = "Bearer")
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes("Hello, from the key, video about JWTkey from the key, video about JWTkey"))
+                    };
+                });
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())

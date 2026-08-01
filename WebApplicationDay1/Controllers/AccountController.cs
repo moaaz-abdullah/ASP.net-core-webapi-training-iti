@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -47,8 +48,11 @@ namespace WebApplicationDay1.Controllers
             {
                 return Unauthorized();
             }
-
-            //eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9wb3N0YWxjb2RlIjoiNjQ2MTIiLCJleHAiOjE3ODU2MzI1NDd9.8tPJcNXoyi4L_2llOxAl8J9Jri0Xg3YdlCy2uTRhfdU
         }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult GetAll() => Ok();
     }
 }
+
