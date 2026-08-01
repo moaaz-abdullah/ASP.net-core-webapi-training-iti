@@ -6,7 +6,7 @@ using WebApplicationDay1.UnitOfWork;
 
 namespace WebApplicationDay1.Controllers
 {
-    [Microsoft.AspNetCore.Components.Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class StudentDeptController : ControllerBase
     {
